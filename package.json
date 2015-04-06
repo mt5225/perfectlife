@@ -1,0 +1,20 @@
+{
+  "name": "PerfectLife",
+  "description": "Perfect Life",
+  "version": "0.1.0",
+  "dependencies": {
+    "grunt": "~0.4.2",
+    "grunt-cli": "~0.1.13",
+    "grunt-connect": "^0.2.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "coffeelint": "^1.9.3",
+    "grunt-coffeelint": "0.0.13",
+    "grunt-contrib-coffee": "^0.13.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-newer": "^1.1.0",
+    "grunt-connect": "~0.2.0",
+    "jssha": "~1.6.0"
+  }
+}
