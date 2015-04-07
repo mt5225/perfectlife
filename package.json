@@ -15,6 +15,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-newer": "^1.1.0",
     "grunt-connect": "~0.2.0",
-    "jssha": "~1.6.0"
+    "jssha": "~1.6.0",
+    "xml2js": "~0.4.6"
   }
 }
