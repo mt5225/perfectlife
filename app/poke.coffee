@@ -1,7 +1,7 @@
 http = require('http')
 qs = require('querystring')
 xml2js = require('xml2js')
-server = http.createServer((req, res) ->
+server = http.createServer (req, res) ->
   if req.method == 'POST'
     body = ''
     req.on 'data', (data) ->
@@ -12,10 +12,10 @@ server = http.createServer((req, res) ->
     req.on 'end', ->
       POST = qs.parse(body)
       xml = Object.keys(POST)[0]
+      #holding request message
       extractedData = {}
       parser = new (xml2js.Parser)
       parser.parseString xml, (err, result) ->
-        console.dir result
         extractedData = result
         return
 
@@ -24,5 +24,5 @@ server = http.createServer((req, res) ->
       res.end()
       return
   return
-)
+
 server.listen 80

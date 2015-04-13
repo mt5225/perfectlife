@@ -1,0 +1,54 @@
+{
+  "button": [
+    {
+      "name": "家园",
+      "sub_button": [
+        {
+          "type": "click",
+          "name": "AGH联盟",
+          "key": "V1002_AGH"
+        }
+      ]
+    },
+    {
+      "name": "预定",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "民宿",
+          "url": "http://119.29.114.143:9000/#/"
+        },
+        {
+          "type": "click",
+          "name": "产品",
+          "key": "V1001_PING"
+        },
+        {
+          "type": "click",
+          "name": "服务",
+          "key": "V1001_PING"
+        }
+      ]
+    },
+    {
+      "name": "客服",
+      "sub_button": [
+        {
+          "type": "click",
+          "name": "订单查询",
+          "key": "V1003_ORD"
+        },
+        {
+          "type": "click",
+          "name": "FAQ",
+          "key": "V1004_FAQ"
+        },
+        {
+          "type": "click",
+          "name": "智能客服",
+          "key": "V1005_ROBOT"
+        }
+      ]
+    }
+  ]
+}

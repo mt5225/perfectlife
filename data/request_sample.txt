@@ -1,0 +1,10 @@
+{
+  xml: {
+    ToUserName: ['gh_f559e9c33005'],
+    FromUserName: ['o82BBs8XqUSk84CNOA3hfQ0kNS90'],
+    CreateTime: ['1428418246'],
+    MsgType: ['event'],
+    Event: ['CLICK'],
+    EventKey: ['V1001_PING']
+  }
+}
