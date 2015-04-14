@@ -19,24 +19,23 @@ module.exports = (grunt) ->
       dev:
         script: './app/js/main.js'
 
-    scp:
-      options:
-        host: '119.29.114.143'
-        username: 'ubuntu'
-        password: '$Sh7evxc'
-      js:
-        files: [
-          cwd: './'
-          src: ['./app/js/*.js']
-          filter: 'isFile'
-          dest: '/home/ubuntu/perfectlife/bin'
-        ]
-  grunt.registerTask 'default', [
-    'watch'
+    sshconfig:
+      "myhost": grunt.file.readJSON 'tc.host'
+
+    sshexec:
+      test:
+        command: 'uptime',
+        options: config: 'myhost'
+    sftp:
+      upload:
+        files: ['./' : 'app/js/*.js']
+        options:
+          config: 'myhost'
+          path: '/home/ubuntu/perfectlife/bin'
+
+  grunt.registerTask 'default', ['watch']
+  grunt.registerTask 'run-remote', [
+    'sftp:upload'
+    'sshexec:test'
   ]
-  grunt.registerTask 'upload', [
-    'scp'
-  ]
-  grunt.registerTask 'run', [
-    'nodemon'
-  ]
+  grunt.registerTask 'run-local', ['nodemon']
