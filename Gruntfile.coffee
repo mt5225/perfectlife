@@ -20,12 +20,19 @@ module.exports = (grunt) ->
         script: './app/js/main.js'
 
     sshconfig:
-      "myhost": grunt.file.readJSON 'tc.host'
+      'myhost': grunt.file.readJSON 'tc.host'
 
     sshexec:
       test:
-        command: 'uptime',
+        command: 'uptime'
         options: config: 'myhost'
+      changeport:
+        command: "sed -i 's/8080/80/g' /home/ubuntu/perfectlife/bin/app/js/main.js"
+        options: config: 'myhost'
+#      node:    todo:fix sudo issue
+#        command: ['echo <%=host.password%> | sudo -S whoami'].join ' && '
+#        options: config: 'myhost'
+
     sftp:
       upload:
         files: ['./' : 'app/js/*.js']
@@ -36,6 +43,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['watch']
   grunt.registerTask 'run-remote', [
     'sftp:upload'
-    'sshexec:test'
+    'sshexec:changeport'
   ]
   grunt.registerTask 'run-local', ['nodemon']

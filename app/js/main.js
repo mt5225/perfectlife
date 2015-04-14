@@ -1,5 +1,5 @@
 (function() {
-  var http, message, qs, server, xml2js;
+  var http, message, qs, server, session_manager, xml2js;
 
   http = require('http');
 
@@ -9,8 +9,12 @@
 
   message = require('./message').message;
 
+  session_manager = require('./session').session_mngt;
+
   server = http.createServer(function(req, res) {
-    var body;
+    var appId, body, sessionManager;
+    sessionManager = new session_manager();
+    appId = '';
     if (req.method === 'POST') {
       body = '';
       req.on('data', function(data) {
@@ -20,7 +24,7 @@
         }
       });
       req.on('end', function() {
-        var POST, extractedData, fromId, parser, toId, xml;
+        var POST, contentToUser, eventKey, extractedData, fromId, messageType, parser, xml;
         POST = qs.parse(body);
         xml = Object.keys(POST)[0];
         extractedData = {};
@@ -30,8 +34,17 @@
         });
         console.dir(extractedData);
         fromId = extractedData.xml.FromUserName[0];
-        toId = extractedData.xml.ToUserName[0];
-        res.write(message.pong(fromId, toId));
+        appId = appId || extractedData.xml.ToUserName[0];
+        messageType = extractedData.xml.MsgType[0];
+        contentToUser = '';
+        if (messageType === 'event') {
+          console.log("user click menu, fromId = " + fromId + " appId = " + appId);
+          eventKey = extractedData.xml.EventKey[0];
+          sessionManager.addOrUpdateSession(fromId, eventKey);
+          sessionManager.printAllSessions();
+          contentToUser = (message.geMessageByEvent(eventKey))(fromId, appId);
+        }
+        res.write(contentToUser);
         res.end();
       });
     }

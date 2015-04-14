@@ -2,8 +2,11 @@ http = require 'http'
 qs = require 'querystring'
 xml2js = require 'xml2js'
 message = require('./message').message
+session_manager = require('./session').session_mngt
 
 server = http.createServer (req, res) ->
+  sessionManager = new session_manager()
+  appId = ''
   if req.method == 'POST'
     body = ''
 #    if data is too much, drop it.
@@ -25,9 +28,19 @@ server = http.createServer (req, res) ->
         return
 
       console.dir extractedData
+      #get the event details
       fromId = extractedData.xml.FromUserName[0]
-      toId = extractedData.xml.ToUserName[0]
-      res.write message.pong fromId, toId
+      appId = appId || extractedData.xml.ToUserName[0]
+      messageType = extractedData.xml.MsgType[0]
+      contentToUser = ''
+      if messageType == 'event' #create or update session
+        console.log "user click menu, fromId = #{fromId} appId = #{appId}"
+        eventKey = extractedData.xml.EventKey[0]
+        sessionManager.addOrUpdateSession fromId, eventKey
+        sessionManager.printAllSessions()
+        contentToUser = (message.geMessageByEvent eventKey)(fromId, appId)
+
+      res.write contentToUser
       res.end()
       return
   return
