@@ -19,6 +19,7 @@ server = http.createServer (req, res) ->
 #    done getting data
     req.on 'end', ->
       POST = qs.parse(body)
+      console.log POST
       xml = Object.keys(POST)[0]
       #holding request message
       extractedData = {}
@@ -27,19 +28,24 @@ server = http.createServer (req, res) ->
         extractedData = result
         return
 
-      console.dir extractedData
       #get the event details
       fromId = extractedData.xml.FromUserName[0]
       appId = appId || extractedData.xml.ToUserName[0]
       messageType = extractedData.xml.MsgType[0]
       contentToUser = ''
-      if messageType == 'event' #create or update session
-        console.log "user click menu, fromId = #{fromId} appId = #{appId}"
-        eventKey = extractedData.xml.EventKey[0]
-        sessionManager.addOrUpdateSession fromId, eventKey
-        sessionManager.printAllSessions()
-        contentToUser = (message.geMessageByEvent eventKey)(fromId, appId)
-
+      switch messageType
+        when 'event'
+          console.log "user click menu, fromId = #{fromId} appId = #{appId}"
+          eventKey = extractedData.xml.EventKey[0]
+          sessionManager.addOrUpdateSession fromId, eventKey
+          sessionManager.printAllSessions()
+          contentToUser = message.geMessageByEvent eventKey, fromId, appId
+        when 'text'
+          textContent = extractedData.xml.Content[0] || 'N/A'
+          userSession = sessionManager.getSessionByUserId fromId || {}
+          contentToUser = message.getMessageByText textContent, fromId, appId, userSession
+        else
+          contentToUser = message.defaultMessage fromId, appId
       res.write contentToUser
       res.end()
       return

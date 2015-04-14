@@ -24,8 +24,10 @@ perfect.SessionManager = do ->
 
 
 
-  p.getSessionStatus = (session) ->
-    s.status for s in sessionList when session.userId == s.userId
+  p.getSessionByUserId = (uid) ->
+    for s in sessionList
+      return s if uid == s.userId
+
 
   p.printAllSessions = ->
     console.log "==session list begin, length = #{sessionList.length} ===>"

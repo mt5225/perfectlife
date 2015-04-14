@@ -30,16 +30,14 @@
       }
       return addNewSession(userId, status);
     };
-    p.getSessionStatus = function(session) {
-      var i, len, results, s;
-      results = [];
+    p.getSessionByUserId = function(uid) {
+      var i, len, s;
       for (i = 0, len = sessionList.length; i < len; i++) {
         s = sessionList[i];
-        if (session.userId === s.userId) {
-          results.push(s.status);
+        if (uid === s.userId) {
+          return s;
         }
       }
-      return results;
     };
     p.printAllSessions = function() {
       var i, len, s;
