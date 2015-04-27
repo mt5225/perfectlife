@@ -24,7 +24,7 @@
         }
       });
       req.on('end', function() {
-        var POST, contentToUser, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
+        var POST, contentToUser, error, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
         POST = qs.parse(body);
         console.log(POST);
         xml = Object.keys(POST)[0];
@@ -33,9 +33,15 @@
         parser.parseString(xml, function(err, result) {
           extractedData = result;
         });
-        fromId = extractedData.xml.FromUserName[0];
-        appId = appId || extractedData.xml.ToUserName[0];
-        messageType = extractedData.xml.MsgType[0];
+        try {
+          fromId = extractedData.xml.FromUserName[0];
+          appId = appId || extractedData.xml.ToUserName[0];
+          messageType = extractedData.xml.MsgType[0];
+        } catch (_error) {
+          error = _error;
+          res.end();
+          return;
+        }
         contentToUser = '';
         switch (messageType) {
           case 'event':

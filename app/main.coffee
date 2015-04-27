@@ -29,9 +29,14 @@ server = http.createServer (req, res) ->
         return
 
       #get the event details
-      fromId = extractedData.xml.FromUserName[0]
-      appId = appId || extractedData.xml.ToUserName[0]
-      messageType = extractedData.xml.MsgType[0]
+      try
+        fromId = extractedData.xml.FromUserName[0]
+        appId = appId || extractedData.xml.ToUserName[0]
+        messageType = extractedData.xml.MsgType[0]
+      catch error
+        res.end()
+        return
+
       contentToUser = ''
       switch messageType
         when 'event'

@@ -41,7 +41,9 @@ module.exports = (grunt) ->
           path: '/home/ubuntu/perfectlife/bin'
 
   grunt.registerTask 'default', ['watch']
+  grunt.registerTask 'compile', ['coffee']
   grunt.registerTask 'run-remote', [
+    'coffee'
     'sftp:upload'
     'sshexec:changeport'
   ]
