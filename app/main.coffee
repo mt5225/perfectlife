@@ -45,12 +45,13 @@ server = http.createServer (req, res) ->
           sessionManager.addOrUpdateSession fromId, eventKey
           sessionManager.printAllSessions()
           contentToUser = message.geMessageByEvent eventKey, fromId, appId
-        when 'text'
+        when 'text'  #user input some text
           textContent = extractedData.xml.Content[0] || 'N/A'
           userSession = sessionManager.getSessionByUserId fromId || {}
           contentToUser = message.getMessageByText textContent, fromId, appId, userSession
         else
           contentToUser = message.defaultMessage fromId, appId
+      console.log contentToUser
       res.write contentToUser
       res.end()
       return

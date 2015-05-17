@@ -59,6 +59,7 @@
           default:
             contentToUser = message.defaultMessage(fromId, appId);
         }
+        console.log(contentToUser);
         res.write(contentToUser);
         res.end();
       });
