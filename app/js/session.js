@@ -38,6 +38,7 @@
           return s;
         }
       }
+      return 'NA';
     };
     p.printAllSessions = function() {
       var i, len, s;

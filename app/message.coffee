@@ -1,7 +1,7 @@
 perfect = perfect or {}
 
 xml2js = require('xml2js')
-ArticleMsgMap = require('./data').article
+ArticleMsgMap = require('./data').ArticleMsgMap
 msgArticleTemple = require('./data').msgArticleTemple
 msgTemple = require('./data').msgTemple
 
@@ -22,9 +22,6 @@ perfect.Message = do ->
   [3] 凤溪玫瑰
   """
 
-  #Message if user input is invalid
-  errMsg = "%^&%^&$^("
-
   #Message Map for event
   EventMsgMap = {
     'V1002_AGH': aghMsg
@@ -36,17 +33,15 @@ perfect.Message = do ->
 
   #response for user keyboard input
   Message.getMessageByText = (msgText, fromId, toId, session) ->
-    msgKey = ""
+    msgBody = ''
     try
       msgKey = "#{session.status}_#{msgText}"
       console.log "message key:  #{msgKey}"
+      msgBody = msgArticleTemple(fromId,toId, ArticleMsgMap[msgKey])
     catch error
-      console.log "session is empty, user input without select a menu"
-
-    msgArticleTemple fromId,toId, (ArticleMsgMap[msgKey] || ArticleMsgMap['Default'])
-
-  Message.defaultMessage = (fromId, toId) ->
-    msgTemple fromId, toId, errMsg
+      console.log "user input free text"
+    finally
+      return msgBody
 
   Message
 

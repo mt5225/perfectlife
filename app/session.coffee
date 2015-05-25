@@ -8,6 +8,7 @@ perfect.SessionManager = do ->
 
   p = SessionManager.prototype
 
+  #status is menukey, e.g. V1002_AGH
   addNewSession = (userId, status) ->
     console.log "add new session with #{userId} #{status}"
     newSession = {userId: userId, status: status}
@@ -27,7 +28,7 @@ perfect.SessionManager = do ->
   p.getSessionByUserId = (uid) ->
     for s in sessionList
       return s if uid == s.userId
-
+    return 'NA'
 
   p.printAllSessions = ->
     console.log "==session list begin, length = #{sessionList.length} ===>"
