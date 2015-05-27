@@ -1,5 +1,5 @@
 (function() {
-  var http, message, qs, server, session_manager, xml2js;
+  var http, message, qs, server, session_manager, slackbot, xml2js;
 
   http = require('http');
 
@@ -10,6 +10,8 @@
   message = require('./message').message;
 
   session_manager = require('./session').session_mngt;
+
+  slackbot = require('./slackbot').Slackbot;
 
   server = http.createServer(function(req, res) {
     var appId, body, sessionManager;
@@ -26,8 +28,9 @@
       req.on('end', function() {
         var POST, contentToUser, error, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
         POST = qs.parse(body);
-        console.log(POST);
+        console.log("==>raw data <==");
         xml = Object.keys(POST)[0];
+        console.log(xml);
         extractedData = {};
         parser = new xml2js.Parser;
         parser.parseString(xml, function(err, result) {
@@ -39,6 +42,7 @@
           messageType = extractedData.xml.MsgType[0];
         } catch (_error) {
           error = _error;
+          console.log(error);
           res.end();
           return;
         }
@@ -57,6 +61,9 @@
             if (userSession !== 'NA') {
               contentToUser = message.getMessageByText(textContent, fromId, appId, userSession);
             }
+            if (contentToUser.length === 0) {
+              slackbot.sendMessage("user: [" + fromId + "] says:  " + textContent);
+            }
         }
         console.log(contentToUser);
         res.write(contentToUser);
@@ -66,5 +73,7 @@
   });
 
   server.listen(8080);
+
+  slackbot.init();
 
 }).call(this);
