@@ -1,5 +1,5 @@
 (function() {
-  var http, message, qs, server, session_manager, slackbot, xml2js;
+  var http, message, msgTemple, qs, server, session_manager, slackbot, tuling, xml2js;
 
   http = require('http');
 
@@ -7,16 +7,26 @@
 
   xml2js = require('xml2js');
 
+  msgTemple = require('./data').msgTemple;
+
   message = require('./message').message;
 
   session_manager = require('./session').session_mngt;
 
   slackbot = require('./slackbot').Slackbot;
 
+  tuling = require('./tuling');
+
   server = http.createServer(function(req, res) {
-    var appId, body, sessionManager;
+    var appId, body, complete, sessionManager;
     sessionManager = new session_manager();
     appId = '';
+    complete = function(res, contentToUser) {
+      console.log("===> answer in wechat <===");
+      console.log(contentToUser);
+      res.write(contentToUser);
+      return res.end();
+    };
     if (req.method === 'POST') {
       body = '';
       req.on('data', function(data) {
@@ -54,20 +64,23 @@
             sessionManager.addOrUpdateSession(fromId, eventKey);
             sessionManager.printAllSessions();
             contentToUser = message.geMessageByEvent(eventKey, fromId, appId);
+            complete(res, contentToUser);
             break;
           case 'text':
             textContent = extractedData.xml.Content[0];
             userSession = sessionManager.getSessionByUserId(fromId);
-            if (userSession !== 'NA') {
+            if (userSession !== 'NA' && userSession.status === 'V1002_AGH') {
               contentToUser = message.getMessageByText(textContent, fromId, appId, userSession);
-            }
-            if (contentToUser.length === 0) {
-              slackbot.sendMessage("user: [" + fromId + "] says:  " + textContent);
+              complete(res, contentToUser);
+            } else {
+              tuling.answer(textContent, function(answer) {
+                console.log(answer);
+                contentToUser = msgTemple(fromId, appId, answer);
+                complete(res, contentToUser);
+                return slackbot.sendMessage("用户 [" + fromId + "] 说: \n \"" + textContent + "\" \n [自动回复]: \n \"" + answer + "\" ");
+              });
             }
         }
-        console.log(contentToUser);
-        res.write(contentToUser);
-        res.end();
       });
     }
   });
