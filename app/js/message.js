@@ -31,7 +31,7 @@
         return msgBody = msgArticleTemple(fromId, toId, ArticleMsgMap[msgKey]);
       } catch (_error) {
         error = _error;
-        return console.log("session is empty, user input without select a menu");
+        return console.log("user input free text");
       } finally {
         return msgBody;
       }
