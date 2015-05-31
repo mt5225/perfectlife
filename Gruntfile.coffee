@@ -35,7 +35,8 @@ module.exports = (grunt) ->
 
     sftp:
       upload:
-        files: ['./' : 'app/js/*.js']
+        files: 
+          './': ['app/js/*.js', 'package.json']
         options:
           config: 'myhost'
           path: '/root/perfectlife/bin'

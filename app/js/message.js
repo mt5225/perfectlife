@@ -31,6 +31,7 @@
         return msgBody = msgArticleTemple(fromId, toId, ArticleMsgMap[msgKey]);
       } catch (_error) {
         error = _error;
+        return console.warn("user input free text");
       } finally {
         return msgBody;
       }
