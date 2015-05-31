@@ -1,5 +1,5 @@
 (function() {
-  var http, message, qs, server, session_manager, xml2js;
+  var http, message, msgTemple, qs, server, session_manager, slackbot, tuling, xml2js;
 
   http = require('http');
 
@@ -7,14 +7,26 @@
 
   xml2js = require('xml2js');
 
+  msgTemple = require('./data').msgTemple;
+
   message = require('./message').message;
 
   session_manager = require('./session').session_mngt;
 
+  slackbot = require('./slackbot').Slackbot;
+
+  tuling = require('./tuling');
+
   server = http.createServer(function(req, res) {
-    var appId, body, sessionManager;
+    var appId, body, complete, sessionManager;
     sessionManager = new session_manager();
     appId = '';
+    complete = function(res, contentToUser) {
+      console.log("===> answer in wechat <===");
+      console.log(contentToUser);
+      res.write(contentToUser);
+      return res.end();
+    };
     if (req.method === 'POST') {
       body = '';
       req.on('data', function(data) {
@@ -26,8 +38,9 @@
       req.on('end', function() {
         var POST, contentToUser, error, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
         POST = qs.parse(body);
-        console.log(POST);
+        console.log("==>raw data <==");
         xml = Object.keys(POST)[0];
+        console.log(xml);
         extractedData = {};
         parser = new xml2js.Parser;
         parser.parseString(xml, function(err, result) {
@@ -39,6 +52,7 @@
           messageType = extractedData.xml.MsgType[0];
         } catch (_error) {
           error = _error;
+          console.log(error);
           res.end();
           return;
         }
@@ -50,21 +64,29 @@
             sessionManager.addOrUpdateSession(fromId, eventKey);
             sessionManager.printAllSessions();
             contentToUser = message.geMessageByEvent(eventKey, fromId, appId);
+            complete(res, contentToUser);
             break;
           case 'text':
             textContent = extractedData.xml.Content[0];
             userSession = sessionManager.getSessionByUserId(fromId);
-            if (userSession !== 'NA') {
+            if (userSession !== 'NA' && userSession.status === 'V1002_AGH') {
               contentToUser = message.getMessageByText(textContent, fromId, appId, userSession);
+              complete(res, contentToUser);
+            } else {
+              tuling.answer(textContent, function(answer) {
+                console.log(answer);
+                contentToUser = msgTemple(fromId, appId, answer);
+                complete(res, contentToUser);
+                return slackbot.sendMessage("用户 [" + fromId + "] 说: \n \"" + textContent + "\" \n [自动回复]: \n \"" + answer + "\" ");
+              });
             }
         }
-        console.log(contentToUser);
-        res.write(contentToUser);
-        res.end();
       });
     }
   });
 
   server.listen(8080);
+
+  slackbot.init();
 
 }).call(this);

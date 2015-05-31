@@ -7,3 +7,8 @@ ssxz:  http://119.29.114.143:9000/static/ssxz.html
 [1] 芦茨土屋
 [2] 石舍香樟
 [3] 玫瑰庄园
+
+tuling123.com  api key: 4af88f9ffc0ec636538bad5668d5e700
+
+http GET
+http://www.tuling123.com/openapi/api?key=4af88f9ffc0ec636538bad5668d5e700&info=你好

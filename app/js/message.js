@@ -24,14 +24,13 @@
     };
     Message.getMessageByText = function(msgText, fromId, toId, session) {
       var error, msgBody, msgKey;
-      msgBody = '';
+      msgBody = msgTemple(fromId, toId, "亲，请输入数字进行选取");
       try {
         msgKey = session.status + "_" + msgText;
         console.log("message key:  " + msgKey);
         return msgBody = msgArticleTemple(fromId, toId, ArticleMsgMap[msgKey]);
       } catch (_error) {
         error = _error;
-        return console.log("user input free text");
       } finally {
         return msgBody;
       }

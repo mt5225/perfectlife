@@ -33,13 +33,13 @@ perfect.Message = do ->
 
   #response for user keyboard input
   Message.getMessageByText = (msgText, fromId, toId, session) ->
-    msgBody = ''
+    msgBody = msgTemple fromId,toId, "亲，请输入数字进行选取"   #default message
     try
       msgKey = "#{session.status}_#{msgText}"
       console.log "message key:  #{msgKey}"
       msgBody = msgArticleTemple(fromId,toId, ArticleMsgMap[msgKey])
     catch error
-      console.log "user input free text"
+      console.warn "user input free text"
     finally
       return msgBody
 

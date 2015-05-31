@@ -1,12 +1,21 @@
 http = require 'http'
 qs = require 'querystring'
 xml2js = require 'xml2js'
+msgTemple = require('./data').msgTemple
 message = require('./message').message
 session_manager = require('./session').session_mngt
+slackbot = require('./slackbot').Slackbot
+tuling  = require './tuling'
 
 server = http.createServer (req, res) ->
   sessionManager = new session_manager()
   appId = ''
+  complete = (res, contentToUser)->
+    console.log "===> answer in wechat <==="
+    console.log contentToUser
+    res.write contentToUser
+    res.end()
+
   if req.method == 'POST'
     body = ''
 #    if data is too much, drop it.
@@ -19,8 +28,9 @@ server = http.createServer (req, res) ->
 #    done getting data
     req.on 'end', ->
       POST = qs.parse(body)
-      console.log POST
+      console.log "==>raw data <=="
       xml = Object.keys(POST)[0]
+      console.log xml
       #holding request message
       extractedData = {}
       parser = new (xml2js.Parser)
@@ -33,28 +43,36 @@ server = http.createServer (req, res) ->
         fromId = extractedData.xml.FromUserName[0]
         appId = appId || extractedData.xml.ToUserName[0]
         messageType = extractedData.xml.MsgType[0]
-      catch error
+      catch error 
+        console.log error
         res.end()
         return
 
       contentToUser = ''
       switch messageType
-        when 'event'
+        when 'event'  #uer click menu
           console.log "user click menu, fromId = #{fromId} appId = #{appId}"
           eventKey = extractedData.xml.EventKey[0]
           sessionManager.addOrUpdateSession fromId, eventKey
           sessionManager.printAllSessions()
           contentToUser = message.geMessageByEvent eventKey, fromId, appId
+          complete(res, contentToUser)
         when 'text'  #user input some text
           textContent = extractedData.xml.Content[0]
           userSession = sessionManager.getSessionByUserId fromId
-          if userSession != 'NA'
+          
+          if userSession != 'NA' and userSession.status == 'V1002_AGH' #user seesion exist
             contentToUser = message.getMessageByText textContent, fromId, appId, userSession
-
-      console.log contentToUser
-      res.write contentToUser
-      res.end()
+            complete(res, contentToUser)
+          
+          else #user input free text, sync to slack
+            tuling.answer textContent, (answer) ->
+              console.log answer
+              contentToUser = msgTemple(fromId, appId, answer)
+              complete(res, contentToUser)
+              slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """                        
       return
   return
 
 server.listen 8080
+slackbot.init()
