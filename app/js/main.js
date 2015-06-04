@@ -1,5 +1,5 @@
 (function() {
-  var http, message, msgTemple, qs, server, session_manager, slackbot, tuling, xml2js;
+  var complete, http, message, msgTemple, qs, server, session_manager, slackbot, tuling, xml2js;
 
   http = require('http');
 
@@ -17,16 +17,17 @@
 
   tuling = require('./tuling');
 
+  complete = function(res, contentToUser) {
+    console.log("===> answer in wechat <===");
+    console.log(contentToUser);
+    res.write(contentToUser);
+    return res.end();
+  };
+
   server = http.createServer(function(req, res) {
-    var appId, body, complete, sessionManager;
+    var appId, body, sessionManager;
     sessionManager = new session_manager();
     appId = '';
-    complete = function(res, contentToUser) {
-      console.log("===> answer in wechat <===");
-      console.log(contentToUser);
-      res.write(contentToUser);
-      return res.end();
-    };
     if (req.method === 'POST') {
       body = '';
       req.on('data', function(data) {
@@ -35,7 +36,7 @@
           request.connection.destroy();
         }
       });
-      req.on('end', function() {
+      return req.on('end', function() {
         var POST, contentToUser, error, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
         POST = qs.parse(body);
         console.log("==>raw data <==");
@@ -64,16 +65,15 @@
             sessionManager.addOrUpdateSession(fromId, eventKey);
             sessionManager.printAllSessions();
             contentToUser = message.geMessageByEvent(eventKey, fromId, appId);
-            complete(res, contentToUser);
-            break;
+            return complete(res, contentToUser);
           case 'text':
             textContent = extractedData.xml.Content[0];
             userSession = sessionManager.getSessionByUserId(fromId);
             if (userSession !== 'NA' && userSession.status === 'V1002_AGH') {
               contentToUser = message.getMessageByText(textContent, fromId, appId, userSession);
-              complete(res, contentToUser);
+              return complete(res, contentToUser);
             } else {
-              tuling.answer(textContent, function(answer) {
+              return tuling.answer(textContent, function(answer) {
                 console.log(answer);
                 contentToUser = msgTemple(fromId, appId, answer);
                 complete(res, contentToUser);

@@ -7,14 +7,15 @@ session_manager = require('./session').session_mngt
 slackbot = require('./slackbot').Slackbot
 tuling  = require './tuling'
 
+complete = (res, contentToUser)->
+  console.log "===> answer in wechat <==="
+  console.log contentToUser
+  res.write contentToUser
+  res.end()
+
 server = http.createServer (req, res) ->
   sessionManager = new session_manager()
   appId = ''
-  complete = (res, contentToUser)->
-    console.log "===> answer in wechat <==="
-    console.log contentToUser
-    res.write contentToUser
-    res.end()
 
   if req.method == 'POST'
     body = ''
@@ -70,9 +71,6 @@ server = http.createServer (req, res) ->
               console.log answer
               contentToUser = msgTemple(fromId, appId, answer)
               complete(res, contentToUser)
-              slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """                        
-      return
-  return
-
+              slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """       
 server.listen 8080
 slackbot.init()

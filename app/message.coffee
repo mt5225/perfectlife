@@ -33,7 +33,7 @@ perfect.Message = do ->
 
   #response for user keyboard input
   Message.getMessageByText = (msgText, fromId, toId, session) ->
-    msgBody = msgTemple fromId,toId, "亲，请输入数字进行选取"   #default message
+    msgBody = msgTemple fromId,toId, aghMsg   #default message
     try
       msgKey = "#{session.status}_#{msgText}"
       console.log "message key:  #{msgKey}"

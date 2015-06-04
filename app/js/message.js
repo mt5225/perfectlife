@@ -24,7 +24,7 @@
     };
     Message.getMessageByText = function(msgText, fromId, toId, session) {
       var error, msgBody, msgKey;
-      msgBody = msgTemple(fromId, toId, "亲，请输入数字进行选取");
+      msgBody = msgTemple(fromId, toId, aghMsg);
       try {
         msgKey = session.status + "_" + msgText;
         console.log("message key:  " + msgKey);

@@ -27,7 +27,7 @@ module.exports = (grunt) ->
         command: 'uptime'
         options: config: 'myhost'
       changeport:
-        command: "sed -i 's/8080/80/g' /root/perfectlife/bin/app/js/main.js"
+        command: "sed -i 's/8080/80/g' /home/ubuntu/perfectlife/bin/app/js/main.js"
         options: config: 'myhost'
 #      node:    todo:fix sudo issue
 #        command: ['echo <%=host.password%> | sudo -S whoami'].join ' && '
@@ -39,7 +39,7 @@ module.exports = (grunt) ->
           './': ['app/js/*.js', 'package.json']
         options:
           config: 'myhost'
-          path: '/root/perfectlife/bin'
+          path: '/home/ubuntu/perfectlife/bin'
 
   grunt.registerTask 'default', ['watch']
   grunt.registerTask 'compile', ['coffee']
