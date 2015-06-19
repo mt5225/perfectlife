@@ -16,10 +16,11 @@ perfect.Message = do ->
 
   # V1002_AGH: show AGH Menu
   aghMsg = """
-  请回复数字选取您兴趣的部落:
-  [1] 芦茨土屋
-  [2] 石舍香樟
-  [3] 凤溪玫瑰
+  请直接回复数字选取您兴趣的营地:
+  [1] 喜乐窝
+  [2] 绿茶
+  [3] 向日葵
+  [0] 关于石舍部落
   """
 
   #Message Map for event
@@ -42,7 +43,7 @@ perfect.Message = do ->
       console.warn "user input free text"
     finally
       return msgBody
-
+      
   Message
 
 exports.message = perfect.Message

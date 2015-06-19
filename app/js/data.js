@@ -1,22 +1,28 @@
 (function() {
   exports.ArticleMsgMap = {
+    'V1002_AGH_0': {
+      title: '石舍香樟',
+      description: '那株久远到无法考证年代的香樟树，那湾清澈可见底的涓涓溪水，那抹夜色中的草长莺飞衍生野趣。石舍香樟 完美生活的见证...',
+      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/ssxz.jpg',
+      url: 'http://qa.aghchina.com.cn:9000/#/houses'
+    },
     'V1002_AGH_1': {
-      title: '芦茨土屋',
-      description: '自然、回归、原生态，则是芦茨土屋坚守不变的色彩 ... 依自然而建，无论原木的外表，还是屋内的树木，家园的每一处都保持了自然有机的风格, 每一处陈设，每一处设计，每一个遐想，每一个憧憬，主角可以是你，配角也可以是你',
-      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/lztw.jpg',
-      url: 'http://qa.aghchina.com.cn:9000/#/'
+      title: '喜乐窝',
+      description: '儿时的情节，十年的酝酿，八年的成长，以及一生的寄托，喜乐窝表达我们对生活与家最本质的追寻。',
+      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/xile.jpg',
+      url: 'http://qa.aghchina.com.cn:9000/#/housedetail?id=H001'
     },
     'V1002_AGH_2': {
-      title: '石舍香樟',
-      description: '那株久远到无法考证年代的香樟树，那湾清澈可见底的涓涓溪水，那抹夜色中的草长莺飞衍生野趣...... 石舍香樟 完美生活的见证。',
-      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/ssxz.jpg',
-      url: 'http://qa.aghchina.com.cn:9000/#/'
+      title: '向日葵',
+      description: '向日葵营地，正如它的花语---勇敢去追求自己想要的幸福。如果...',
+      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/xrk.jpg',
+      url: 'http://qa.aghchina.com.cn:9000/#/housedetail?id=H002'
     },
     'V1002_AGH_3': {
-      title: '凤溪玫瑰',
-      description: '凤溪玫瑰不仅是一种深度旅游休闲的慢生活度假产品，更是一种差异化乡村多种生活形态的互动体验。',
-      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/fxmg.jpg',
-      url: 'http://qa.aghchina.com.cn:9000/#/'
+      title: '绿茶',
+      description: '远离城市浮华，步入大自然的怀抱，在上水之间寻找内心的自我...',
+      picurl: 'http://aghpic.oss-cn-shenzhen.aliyuncs.com/wechatapp/greentea.jpg',
+      url: 'http://qa.aghchina.com.cn:9000/#/housedetail?id=H003'
     }
   };
 

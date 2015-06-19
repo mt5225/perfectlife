@@ -60,17 +60,15 @@ server = http.createServer (req, res) ->
           complete(res, contentToUser)
         when 'text'  #user input some text
           textContent = extractedData.xml.Content[0]
-          userSession = sessionManager.getSessionByUserId fromId
-          
+          userSession = sessionManager.getSessionByUserId fromId         
           if userSession != 'NA' and userSession.status == 'V1002_AGH' #user seesion exist
             contentToUser = message.getMessageByText textContent, fromId, appId, userSession
-            complete(res, contentToUser)
-          
+            complete(res, contentToUser)         
           else #user input free text, sync to slack
             tuling.answer textContent, (answer) ->
               console.log answer
               contentToUser = msgTemple(fromId, appId, answer)
               complete(res, contentToUser)
               slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """       
-server.listen 8080
+server.listen 80
 slackbot.init()

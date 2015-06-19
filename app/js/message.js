@@ -15,7 +15,7 @@
     var EventMsgMap, Message, aghMsg, defaultMsg;
     Message = function() {};
     defaultMsg = "功能建设中 ...";
-    aghMsg = "请回复数字选取您兴趣的部落:\n[1] 芦茨土屋\n[2] 石舍香樟\n[3] 凤溪玫瑰";
+    aghMsg = "请直接回复数字选取您兴趣的营地:\n[1] 喜乐窝\n[2] 绿茶\n[3] 向日葵\n[0] 关于石舍部落";
     EventMsgMap = {
       'V1002_AGH': aghMsg
     };
