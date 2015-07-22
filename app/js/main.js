@@ -37,7 +37,7 @@
         }
       });
       return req.on('end', function() {
-        var POST, contentToUser, error, eventKey, extractedData, fromId, messageType, parser, textContent, userSession, xml;
+        var POST, contentToUser, error, eventKey, eventStr, extractedData, fromId, messageType, parser, status, textContent, userSession, xml;
         POST = qs.parse(body);
         console.log("==>raw data <==");
         xml = Object.keys(POST)[0];
@@ -61,13 +61,35 @@
         switch (messageType) {
           case 'event':
             console.log("user click menu, fromId = " + fromId + " appId = " + appId);
-            eventKey = extractedData.xml.EventKey[0];
-            sessionManager.addOrUpdateSession(fromId, eventKey);
-            sessionManager.printAllSessions();
-            contentToUser = message.geMessageByEvent(eventKey, fromId, appId);
-            return complete(res, contentToUser);
+            try {
+              eventKey = extractedData.xml.EventKey[0];
+              eventStr = extractedData.xml.Event[0];
+              status = 'NA';
+              if (eventKey != null ? eventKey.length : void 0) {
+                status = eventKey;
+              } else {
+                status = eventStr;
+              }
+              console.log(status);
+              sessionManager.addOrUpdateSession(fromId, status);
+              sessionManager.printAllSessions();
+              contentToUser = message.geMessageByEvent(status, fromId, appId);
+              return complete(res, contentToUser);
+            } catch (_error) {
+              error = _error;
+              console.log(error);
+              res.end();
+            }
+            break;
           case 'text':
-            textContent = extractedData.xml.Content[0];
+            try {
+              textContent = extractedData.xml.Content[0];
+            } catch (_error) {
+              error = _error;
+              console.log(error);
+              res.end();
+              return;
+            }
             userSession = sessionManager.getSessionByUserId(fromId);
             if (userSession !== 'NA' && userSession.status === 'V1002_AGH') {
               contentToUser = message.getMessageByText(textContent, fromId, appId, userSession);

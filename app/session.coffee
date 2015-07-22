@@ -23,8 +23,6 @@ perfect.SessionManager = do ->
           return s
     addNewSession(userId, status)
 
-
-
   p.getSessionByUserId = (uid) ->
     for s in sessionList
       return s if uid == s.userId

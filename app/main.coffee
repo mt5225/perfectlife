@@ -53,15 +53,32 @@ server = http.createServer (req, res) ->
       switch messageType
         when 'event'  #uer click menu
           console.log "user click menu, fromId = #{fromId} appId = #{appId}"
-          eventKey = extractedData.xml.EventKey[0]
-          sessionManager.addOrUpdateSession fromId, eventKey
-          sessionManager.printAllSessions()
-          contentToUser = message.geMessageByEvent eventKey, fromId, appId
-          complete(res, contentToUser)
+          try
+            eventKey = extractedData.xml.EventKey[0]
+            eventStr = extractedData.xml.Event[0]
+            status = 'NA'
+            if eventKey?.length
+              status = eventKey
+            else
+              status = eventStr
+            console.log status
+            sessionManager.addOrUpdateSession fromId, status
+            sessionManager.printAllSessions()
+            contentToUser = message.geMessageByEvent status, fromId, appId
+            complete(res, contentToUser)
+          catch error
+            console.log error
+            res.end()
+            return
         when 'text'  #user input some text
-          textContent = extractedData.xml.Content[0]
+          try
+            textContent = extractedData.xml.Content[0]
+          catch error
+            console.log error
+            res.end()
+            return
           userSession = sessionManager.getSessionByUserId fromId         
-          if userSession != 'NA' and userSession.status == 'V1002_AGH' #user seesion exist
+          if userSession isnt 'NA' and userSession.status is 'V1002_AGH' #user seesion exist and talk to 'choose tribe' menu
             contentToUser = message.getMessageByText textContent, fromId, appId, userSession
             complete(res, contentToUser)         
           else #user input free text, sync to slack

@@ -18,19 +18,30 @@ perfect.Message = do ->
   aghMsg = """
   请直接回复数字选取您兴趣的营地:
   [1] 喜乐窝
-  [2] 绿茶
-  [3] 向日葵
+  [2] 向日葵
+  [3] 绿茶
   [0] 关于石舍部落
+  """
+
+  qaMsg = """
+  您好，我是漫生活客服
+  有什么可以帮您 ?
+  [预订营地请点击底部“营地预订”菜单，选购漫生活产品请点击“产品”菜单]
   """
 
   #Message Map for event
   EventMsgMap = {
     'V1002_AGH': aghMsg
+    'V1005_QA': qaMsg
   }
 
   #response for the menu selection
-  Message.geMessageByEvent = (eventKey, fromId, toId) ->
-    msgTemple fromId,toId, (EventMsgMap[eventKey] || defaultMsg)
+  Message.geMessageByEvent = (status, fromId, toId) ->
+    if status is 'subscribe'
+      msgBody = msgArticleTemple fromId, toId, ArticleMsgMap['subscribe']
+    else 
+      msgBody = msgTemple fromId,toId, (EventMsgMap[status] || defaultMsg)
+    msgBody
 
   #response for user keyboard input
   Message.getMessageByText = (msgText, fromId, toId, session) ->

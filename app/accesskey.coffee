@@ -6,7 +6,7 @@ fs = require "fs"
 perfect.AccessKey = do ->
   AccessKey = ->
 
-  #key for wechat test accoun
+  #key for wechat test account
   APPID = 'wxe2bdce057501817d'
   APPSecret = 'c907a867dc3deebff5c0b2c392c77b90'
 
