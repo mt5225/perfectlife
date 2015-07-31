@@ -11,7 +11,7 @@ module.exports = (grunt) ->
         expand: true
         flatten: false
         cwd: './app'
-        src: ['*.coffee']
+        src: ['{,*/}*.coffee']
         dest: './app/js'
         ext: '.js'
 
@@ -21,25 +21,43 @@ module.exports = (grunt) ->
 
     sshconfig:
       'myhost': grunt.file.readJSON 'tc.host'
+      'myhost_prod': grunt.file.readJSON 'tc_prod.host'
 
     sshexec:
-      restart:
-        command: "forever restart oICs"
+      restart_qa:
+        command: "export NODE_ENV=qa;cd /root/perfectlife/bin;forever stop app/js/main.js;forever start ./app/js/main.js"
         options: config: 'myhost'
+      restart_prod:
+        command: "export NODE_ENV=prod;cd /root/perfectlife/bin;forever stop app/js/main.js;forever start ./app/js/main.js"
+        options: config: 'myhost_prod'
 
     sftp:
       upload:
-        files: 
-          './': ['app/js/*.js', 'package.json']
+        files: './': ['app/js/**', 'package.json']
         options:
           config: 'myhost'
-          path: '/root/perfectlife/bin'
+          path: '/root/perfectlife/bin/app'
+          srcBasePath: 'app'
+          createDirectories: true
+      upload_prod:
+        files: './': ['app/js/**', 'package.json']
+        options:
+          config: 'myhost_prod'
+          path: '/root/perfectlife/bin/app'
+          srcBasePath: 'app'
+          createDirectories: true
 
   grunt.registerTask 'default', ['watch']
   grunt.registerTask 'compile', ['coffee']
-  grunt.registerTask 'run-remote', [
+  grunt.registerTask 'run-remote-qa', [
     'coffee'
     'sftp:upload'
-    'sshexec:restart'
+    'sshexec:restart_qa'
+  ]
+  grunt.registerTask 'run-remote-prod', [
+    'coffee'
+    'sftp:upload_prod'
+    'sshexec:restart_prod'
   ]
   grunt.registerTask 'run-local', ['nodemon']
+  

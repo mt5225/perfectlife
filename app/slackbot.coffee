@@ -1,7 +1,8 @@
+config = require './config'
 perfect = perfect or {}
 Slack = require 'slack-client'
 slack2wechat = require './slack2wechat'
-token = 'xoxb-5042459146-mKyVHVNRYWRl80BxTb3Kqftb'
+token = config.Slackbot
 
 perfect.Slackbot = do ->
   Slackbot = ->

@@ -1,14 +1,11 @@
 perfect = perfect or {}
 https = require('https')
 fs = require "fs"
+config = require './config'
 
 #session manager class
 perfect.AccessKey = do ->
   AccessKey = ->
-
-  #key for wechat test account
-  APPID = 'wxe2bdce057501817d'
-  APPSecret = 'c907a867dc3deebff5c0b2c392c77b90'
 
   createTimestamp = ->
     parseInt((new Date).getTime() / 1000) + ''
@@ -17,7 +14,7 @@ perfect.AccessKey = do ->
     options =
       host: 'api.weixin.qq.com'
       port: 443
-      path: "/cgi-bin/token?grant_type=client_credential&appid=#{APPID}&secret=#{APPSecret}"
+      path: "/cgi-bin/token?grant_type=client_credential&appid=#{config.APPID}&secret=#{config.APPSecret}"
       method: 'GET'
       headers: accept: '*/*'
     req = https.request options, (res) ->

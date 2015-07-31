@@ -1,5 +1,5 @@
 (function() {
-  var fs, https, perfect;
+  var config, fs, https, perfect;
 
   perfect = perfect || {};
 
@@ -7,11 +7,11 @@
 
   fs = require("fs");
 
+  config = require('./config');
+
   perfect.AccessKey = (function() {
-    var APPID, APPSecret, AccessKey, createTimestamp, renewKey;
+    var AccessKey, createTimestamp, renewKey;
     AccessKey = function() {};
-    APPID = 'wxe2bdce057501817d';
-    APPSecret = 'c907a867dc3deebff5c0b2c392c77b90';
     createTimestamp = function() {
       return parseInt((new Date).getTime() / 1000) + '';
     };
@@ -20,7 +20,7 @@
       options = {
         host: 'api.weixin.qq.com',
         port: 443,
-        path: "/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSecret,
+        path: "/cgi-bin/token?grant_type=client_credential&appid=" + config.APPID + "&secret=" + config.APPSecret,
         method: 'GET',
         headers: {
           accept: '*/*'

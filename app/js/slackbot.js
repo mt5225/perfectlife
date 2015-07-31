@@ -1,5 +1,7 @@
 (function() {
-  var Slack, perfect, slack2wechat, token;
+  var Slack, config, perfect, slack2wechat, token;
+
+  config = require('./config');
 
   perfect = perfect || {};
 
@@ -7,7 +9,7 @@
 
   slack2wechat = require('./slack2wechat');
 
-  token = 'xoxb-5042459146-mKyVHVNRYWRl80BxTb3Kqftb';
+  token = config.Slackbot;
 
   perfect.Slackbot = (function() {
     var Slackbot, getChannels, isDirect, makeMention;
