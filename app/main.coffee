@@ -86,6 +86,6 @@ server = http.createServer (req, res) ->
               console.log answer
               contentToUser = msgTemple(fromId, appId, answer)
               complete(res, contentToUser)
-              slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """       
+              #slackbot.sendMessage """用户 [#{fromId}] 说: \n "#{textContent}" \n [自动回复]: \n "#{answer}" """       
 server.listen 80
-slackbot.init()
+#slackbot.init()

@@ -98,8 +98,7 @@
               return tuling.answer(textContent, function(answer) {
                 console.log(answer);
                 contentToUser = msgTemple(fromId, appId, answer);
-                complete(res, contentToUser);
-                return slackbot.sendMessage("用户 [" + fromId + "] 说: \n \"" + textContent + "\" \n [自动回复]: \n \"" + answer + "\" ");
+                return complete(res, contentToUser);
               });
             }
         }
@@ -108,7 +107,5 @@
   });
 
   server.listen(80);
-
-  slackbot.init();
 
 }).call(this);
